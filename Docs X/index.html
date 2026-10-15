@@ -1,40 +1,69 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Docs X - Document Editor</title>
+  <title>Docs X</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1e1e2e; color: #cdd6f4; display: flex; flex-direction: column; height: 100vh; }
-    header { background: #181825; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #313244; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1e1e2e; color: #cdd6f4; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header { background: #181825; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #313244; }
     h1 { font-size: 20px; color: #89b4fa; }
+    .nav-tabs { display: flex; gap: 10px; background: #181825; padding: 8px 20px; border-bottom: 1px solid #313244; }
+    .tab-btn { background: #313244; color: #cdd6f4; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .tab-btn:hover { background: #45475a; }
     .toolbar { background: #313244; padding: 10px 20px; display: flex; gap: 10px; align-items: center; }
-    button { background: #89b4fa; color: #11111b; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button { background: #89b4fa; color: #11111b; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
     button:hover { background: #b4befe; }
-    .editor-container { flex: 1; padding: 20px; display: flex; justify-content: center; }
-    textarea { width: 100%; max-width: 900px; height: 100%; background: #11111b; color: #cdd6f4; border: 1px solid #45475a; border-radius: 8px; padding: 20px; font-size: 16px; line-height: 1.6; resize: none; outline: none; }
+    .section { flex: 1; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
+    textarea { width: 100%; height: 100%; background: #11111b; color: #cdd6f4; border: 1px solid #45475a; border-radius: 8px; padding: 20px; font-size: 16px; outline: none; resize: none; }
+    .leaderboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+    .lb-card { background: #181825; padding: 15px; border-radius: 8px; border: 1px solid #313244; text-align: center; }
+    .lb-card h4 { color: #a6adc8; font-size: 12px; }
+    .lb-card p { color: #89b4fa; font-size: 20px; font-weight: bold; margin-top: 5px; }
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
     footer { background: #181825; padding: 10px 20px; font-size: 12px; color: #a6adc8; display: flex; justify-content: space-between; border-top: 1px solid #313244; }
   </style>
-
-  <!-- External Libraries for PDF and DOCX export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 </head>
 <body>
 
   <header>
-    <h1>Docs X - Document Editor</h1>
+    <h1>Docs X</h1>
     <div id="status">Doccee 🪙: 0</div>
   </header>
 
-  <div class="toolbar">
-    <button onclick="saveTXT()">Save as .TXT</button>
-    <button onclick="savePDF()">Export as .PDF</button>
-    <button onclick="saveDOCX()">Export as .DOCX</button>
+  <div class="nav-tabs">
+    <button id="tab-editor" class="tab-btn" style="background: #89b4fa; color: #11111b;" onclick="switchTab('editor')">📝 Document Editor</button>
+    <button id="tab-media" class="tab-btn" onclick="switchTab('media')">🎨 Media Studio</button>
+    <button id="tab-gaming" class="tab-btn" onclick="switchTab('gaming')">🎮 Gaming Hub</button>
   </div>
 
-  <div class="editor-container">
-    <textarea id="editor" placeholder="यहाँ अपना डॉक्यूमेंट टाइप करना शुरू करें..."></textarea>
+  <div id="editorSection" class="section" style="display: flex;">
+    <div class="toolbar" style="margin-bottom: 15px; border-radius: 6px;">
+      <button onclick="saveTXT()">Save as .TXT</button>
+      <button onclick="savePDF()">Export as .PDF</button>
+      <button onclick="saveDOCX()">Export as .DOCX</button>
+    </div>
+    <textarea id="editor" placeholder="Start typing your document here..."></textarea>
+  </div>
+
+  <div id="mediaSection" class="section">
+    <h2>🎨 Media Studio</h2>
+    <p style="margin-top: 10px; color: #a6adc8;">Media editing features are coming soon...</p>
+  </div>
+
+  <div id="gamingSection" class="section">
+    <h2 style="margin-bottom: 15px;">🏆 4-Pillar Leaderboards</h2>
+    <div class="leaderboard-grid">
+      <div class="lb-card"><h4>TIME SPENT</h4><p id="lb-time">0 mins</p></div>
+      <div class="lb-card"><h4>GAMES WON</h4><p id="lb-wins">0 wins</p></div>
+      <div class="lb-card"><h4>DOCCEE BALANCE</h4><p id="lb-balance">0 🪙</p></div>
+      <div class="lb-card"><h4>DOCCEE SPENT</h4><p id="lb-spent">0 🪙</p></div>
+    </div>
+
+    <h2 style="margin-bottom: 15px;">🎮 Mini-Games Hub</h2>
+    <div id="gamesGrid" class="games-grid"></div>
   </div>
 
   <footer>
@@ -42,76 +71,8 @@
     <span>Docs X v1.0</span>
   </footer>
 
-  <script>
-    const { ipcRenderer } = require('electron');
-    const editor = document.getElementById('editor');
-    const charCount = document.getElementById('charCount');
-
-    editor.addEventListener('input', () => {
-      charCount.innerText = `${editor.value.length} characters`;
-    });
-
-    // Save as .TXT
-    async function saveTXT() {
-      const text = editor.value;
-      if (!text.trim()) return alert('कृपया पहले कुछ लिखें!');
-      
-      const res = await ipcRenderer.invoke('save-file', {
-        content: text,
-        defaultName: 'document.txt',
-        filters: [{ name: 'Text File', extensions: ['txt'] }]
-      });
-
-      if (res.success) alert('फाइल .txt में सफलतापूर्वक सेव हो गई!');
-    }
-
-    // Export as .PDF
-    async function savePDF() {
-      const text = editor.value;
-      if (!text.trim()) return alert('कृपया पहले कुछ लिखें!');
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      
-      const splitText = doc.splitTextToSize(text, 180);
-      doc.text(splitText, 10, 10);
-
-      const pdfData = doc.output('arraybuffer');
-      const buffer = Buffer.from(pdfData);
-
-      const res = await ipcRenderer.invoke('save-file', {
-        content: buffer,
-        defaultName: 'document.pdf',
-        filters: [{ name: 'PDF Document', extensions: ['pdf'] }]
-      });
-
-      if (res.success) alert('फाइल .pdf में सफलतापूर्वक एक्सपोर्ट हो गई!');
-    }
-
-    // Export as .DOCX
-    async function saveDOCX() {
-      const text = editor.value;
-      if (!text.trim()) return alert('कृपया पहले कुछ लिखें!');
-
-      const docxLib = window.docx;
-      const doc = new docxLib.Document({
-        sections: [{
-          children: text.split('\n').map(line => new docxLib.Paragraph({
-            children: [new docxLib.TextRun(line)]
-          }))
-        }]
-      });
-
-      const blob = await docxLib.Packer.toBuffer(doc);
-
-      const res = await ipcRenderer.invoke('save-file', {
-        content: blob,
-        defaultName: 'document.docx',
-        filters: [{ name: 'Word Document', extensions: ['docx'] }]
-      });
-
-      if (res.success) alert('फाइल .docx में सफलतापूर्वक एक्सपोर्ट हो गई!');
-    }
-  </script>
+  <script src="games.js"></script>
+  <script src="games-ui.js"></script>
+  <script src="editor.js"></script>
 </body>
 </html>
