@@ -1,24 +1,14 @@
 {
   "name": "docs-x",
   "version": "1.0.0",
-  "description": "Document Management Hub & Creative Studio",
+  "description": "Docs X Application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win --x64"
+    "build": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^31.0.0",
-    "electron-builder": "^24.13.3"
-  },
-  "build": {
-    "appId": "com.docsx.app",
-    "productName": "DocsX",
-    "win": {
-      "target": "nsis"
-    },
-    "directories": {
-      "output": "dist"
-    }
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0"
   }
 }
