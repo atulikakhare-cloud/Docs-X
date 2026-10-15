@@ -1,14 +1,27 @@
 {
   "name": "docs-x",
   "version": "1.0.0",
-  "description": "Docs X Application",
+  "description": "Docs X - Document Editor, Media Studio, and Gaming Hub",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
   },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^8.5.0",
+    "jspdf": "^2.5.1"
+  },
   "devDependencies": {
     "electron": "^28.0.0",
     "electron-builder": "^24.9.0"
+  },
+  "build": {
+    "appId": "com.docsx.app",
+    "productName": "Docs X",
+    "win": {
+      "target": "nsis"
+    }
   }
 }
