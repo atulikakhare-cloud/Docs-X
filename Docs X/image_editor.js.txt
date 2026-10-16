@@ -1,0 +1,40 @@
+function initImageEditorUI() {
+  const container = document.getElementById('imageEditorView');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="background: #181825; padding: 20px; border-radius: 8px; border: 1px solid #313244; display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center; flex: 1;">
+      <input type="file" id="imageUploadInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+      <button onclick="document.getElementById('imageUploadInput').click()" style="background: #89b4fa; color: #11111b; padding: 12px 24px; font-size: 15px;">📁 Upload Image</button>
+      <div id="imageCanvasContainer" style="width: 100%; height: 350px; background: #11111b; border: 1px solid #45475a; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+        <p style="color: #a6adc8;">No image uploaded yet</p>
+      </div>
+      <div id="imageTools" style="display: none; gap: 10px;">
+        <button onclick="applyImageFilter('none')">Normal</button>
+        <button onclick="applyImageFilter('grayscale(100%)')">Grayscale</button>
+        <button onclick="applyImageFilter('sepia(100%)')">Sepia</button>
+        <button onclick="applyImageFilter('invert(100%)')">Invert</button>
+      </div>
+    </div>
+  `;
+}
+
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const container = document.getElementById('imageCanvasContainer');
+    container.innerHTML = `<img id="uploadedImagePreview" src="${event.target.result}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+    document.getElementById('imageTools').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function applyImageFilter(filterStyle) {
+  const img = document.getElementById('uploadedImagePreview');
+  if (img) {
+    img.style.filter = filterStyle;
+  }
+}
